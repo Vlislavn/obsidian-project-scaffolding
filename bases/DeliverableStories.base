@@ -1,0 +1,25 @@
+filters:
+  and:
+    - file.folder == this.file.folder + "/stories"
+    - type == "story"
+properties:
+  file.name:
+    displayName: Story
+  owner:
+    displayName: Owner
+  status:
+    displayName: Status
+  size:
+    displayName: Size
+  deadline:
+    displayName: Deadline
+  last_ping:
+    displayName: Last Ping
+views:
+  - type: table
+    name: Stories
+    order:
+      - status
+      - deadline
+      - file.name
+    sort: []

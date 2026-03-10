@@ -1,0 +1,528 @@
+{
+  "version": "1.9.7",
+  "data": {
+    "boardConfigs": [
+      {
+        "columns": [
+          {
+            "id": 833065971,
+            "colType": "undated",
+            "active": true,
+            "collapsed": false,
+            "name": "Undated Tasks",
+            "index": 1,
+            "datedBasedColumn": {
+              "dateType": "due",
+              "from": 0,
+              "to": 0
+            }
+          },
+          {
+            "id": 1504695908,
+            "colType": "dated",
+            "active": true,
+            "collapsed": false,
+            "name": "Over Due",
+            "index": 2,
+            "datedBasedColumn": {
+              "dateType": "due",
+              "from": -300,
+              "to": -1
+            }
+          },
+          {
+            "id": 1711241227,
+            "colType": "dated",
+            "active": true,
+            "collapsed": false,
+            "name": "Today",
+            "index": 3,
+            "datedBasedColumn": {
+              "dateType": "due",
+              "from": 0,
+              "to": 0
+            }
+          },
+          {
+            "id": 578295795,
+            "colType": "dated",
+            "active": true,
+            "collapsed": false,
+            "name": "Tomorrow",
+            "index": 4,
+            "datedBasedColumn": {
+              "dateType": "due",
+              "from": 1,
+              "to": 1
+            }
+          },
+          {
+            "id": 2432594785,
+            "colType": "dated",
+            "active": true,
+            "collapsed": false,
+            "name": "Future",
+            "index": 5,
+            "datedBasedColumn": {
+              "dateType": "due",
+              "from": 2,
+              "to": 300
+            }
+          },
+          {
+            "id": 2251673667,
+            "colType": "completed",
+            "active": true,
+            "collapsed": false,
+            "limit": 20,
+            "name": "Completed",
+            "index": 6
+          }
+        ],
+        "name": "Time Based Workflow",
+        "index": 0,
+        "showColumnTags": false,
+        "showFilteredTags": true,
+        "hideEmptyColumns": false,
+        "boardFilter": {
+          "rootCondition": "any",
+          "filterGroups": []
+        },
+        "swimlanes": {
+          "enabled": false,
+          "hideEmptySwimlanes": false,
+          "property": "tags",
+          "sortCriteria": "asc",
+          "minimized": [],
+          "maxHeight": "300px",
+          "verticalHeaderUI": false
+        },
+        "taskCount": {
+          "pending": 4,
+          "completed": 3
+        }
+      },
+      {
+        "columns": [
+          {
+            "id": 1445852902,
+            "colType": "untagged",
+            "active": true,
+            "collapsed": false,
+            "name": "Backlogs",
+            "index": 1
+          },
+          {
+            "id": 1990288292,
+            "colType": "namedTag",
+            "active": true,
+            "collapsed": false,
+            "name": "Important",
+            "index": 2,
+            "coltag": "important"
+          },
+          {
+            "id": 2269507794,
+            "colType": "namedTag",
+            "active": true,
+            "collapsed": false,
+            "name": "WIP",
+            "index": 3,
+            "coltag": "wip"
+          },
+          {
+            "id": 1107555374,
+            "colType": "namedTag",
+            "active": true,
+            "collapsed": false,
+            "name": "In Review",
+            "index": 5,
+            "coltag": "review"
+          },
+          {
+            "id": 2757512877,
+            "colType": "completed",
+            "active": true,
+            "collapsed": false,
+            "index": 6,
+            "limit": 20,
+            "name": "Completed"
+          }
+        ],
+        "name": "Tag Based Workflow",
+        "index": 1,
+        "showColumnTags": false,
+        "showFilteredTags": true,
+        "hideEmptyColumns": false,
+        "boardFilter": {
+          "rootCondition": "any",
+          "filterGroups": []
+        },
+        "swimlanes": {
+          "enabled": false,
+          "hideEmptySwimlanes": false,
+          "property": "tags",
+          "sortCriteria": "asc",
+          "minimized": [],
+          "maxHeight": "300px",
+          "verticalHeaderUI": false
+        }
+      },
+      {
+        "columns": [
+          {
+            "id": 1084054902,
+            "colType": "taskStatus",
+            "taskStatus": " ",
+            "active": true,
+            "collapsed": false,
+            "name": "Backlogs",
+            "index": 1
+          },
+          {
+            "id": 4240292490,
+            "colType": "taskStatus",
+            "taskStatus": "<",
+            "active": true,
+            "collapsed": false,
+            "name": "TODO",
+            "index": 2,
+            "filters": {
+              "rootCondition": "any",
+              "filterGroups": []
+            },
+            "sortCriteria": []
+          },
+          {
+            "id": 522894935,
+            "colType": "taskStatus",
+            "taskStatus": "/",
+            "active": true,
+            "collapsed": false,
+            "name": "In Progress",
+            "index": 3
+          },
+          {
+            "id": 2093722543,
+            "colType": "taskStatus",
+            "taskStatus": "?",
+            "active": true,
+            "collapsed": false,
+            "name": "In Review",
+            "index": 5
+          },
+          {
+            "id": 2606131119,
+            "colType": "completed",
+            "active": true,
+            "collapsed": false,
+            "index": 6,
+            "limit": 20,
+            "name": "Completed"
+          },
+          {
+            "id": 34625177,
+            "colType": "taskStatus",
+            "taskStatus": "*",
+            "active": true,
+            "collapsed": false,
+            "name": "Cancelled",
+            "index": 7
+          }
+        ],
+        "name": "Status Based Workflow",
+        "index": 2,
+        "showColumnTags": false,
+        "showFilteredTags": true,
+        "hideEmptyColumns": false,
+        "boardFilter": {
+          "rootCondition": "any",
+          "filterGroups": []
+        },
+        "swimlanes": {
+          "enabled": false,
+          "hideEmptySwimlanes": false,
+          "property": "tags",
+          "sortCriteria": "asc",
+          "minimized": [],
+          "maxHeight": "300px",
+          "verticalHeaderUI": false
+        },
+        "taskCount": {
+          "pending": 4,
+          "completed": 3
+        }
+      }
+    ],
+    "globalSettings": {
+      "lang": "en",
+      "openOnStartup": false,
+      "scanFilters": {
+        "files": {
+          "polarity": 3,
+          "values": []
+        },
+        "folders": {
+          "polarity": 3,
+          "values": []
+        },
+        "frontmatter": {
+          "polarity": 3,
+          "values": []
+        },
+        "tags": {
+          "polarity": 3,
+          "values": []
+        }
+      },
+      "firstDayOfWeek": "Mon",
+      "showTaskWithoutMetadata": true,
+      "ignoreFileNameDates": false,
+      "taskPropertyFormat": "2",
+      "dateFormat": "yyyy-MM-dd",
+      "dateTimeFormat": "yyyy-MM-dd'T'HH:mm:ss",
+      "dailyNotesPluginComp": false,
+      "defaultStartTime": "",
+      "taskCompletionInLocalTime": true,
+      "taskCompletionShowUtcOffset": false,
+      "autoAddUniversalDate": true,
+      "autoAddCreatedDate": false,
+      "autoAddCompletedDate": false,
+      "autoAddCancelledDate": false,
+      "showModifiedFilesNotice": true,
+      "scanMode": "automatic",
+      "columnWidth": "300px",
+      "visiblePropertiesList": [
+        "checkbox",
+        "id",
+        "title",
+        "subTasksMinimized",
+        "descriptionMinimized",
+        "status",
+        "tags",
+        "time",
+        "reminder",
+        "priority",
+        "createdDate",
+        "startDate",
+        "scheduledDate",
+        "dueDate",
+        "completionDate",
+        "cancelledDate",
+        "dependsOn",
+        "filePath"
+      ],
+      "taskCardStyle": "emoji",
+      "showVerticalScroll": true,
+      "tagColors": [
+        {
+          "name": "bug",
+          "color": "rgba(255, 0, 0, 0.55)",
+          "priority": 1
+        },
+        {
+          "name": "important",
+          "color": "rgba(246, 255, 0, 0.53)",
+          "priority": 2
+        },
+        {
+          "name": "wip",
+          "color": "rgba(0, 255, 0, 0.53)",
+          "priority": 2
+        },
+        {
+          "name": "review",
+          "color": "rgba(0, 0, 255, 0.49)",
+          "priority": 3
+        }
+      ],
+      "editButtonAction": "popUp",
+      "doubleClickCardToEdit": "none",
+      "universalDate": "due",
+      "tagColorsType": "text",
+      "customStatuses": [
+        {
+          "symbol": " ",
+          "name": "Todo",
+          "nextStatusSymbol": "x",
+          "availableAsCommand": false,
+          "type": "TODO"
+        },
+        {
+          "symbol": "<",
+          "name": "Ready to start",
+          "nextStatusSymbol": "x",
+          "availableAsCommand": false,
+          "type": "TODO"
+        },
+        {
+          "symbol": "?",
+          "name": "In Review",
+          "nextStatusSymbol": "x",
+          "availableAsCommand": false,
+          "type": "TODO"
+        },
+        {
+          "symbol": "/",
+          "name": "In Progress",
+          "nextStatusSymbol": "x",
+          "availableAsCommand": true,
+          "type": "IN_PROGRESS"
+        },
+        {
+          "symbol": "x",
+          "name": "Done",
+          "nextStatusSymbol": " ",
+          "availableAsCommand": true,
+          "type": "DONE"
+        },
+        {
+          "symbol": "X",
+          "name": "Completed",
+          "nextStatusSymbol": " ",
+          "availableAsCommand": true,
+          "type": "DONE"
+        },
+        {
+          "symbol": "-",
+          "name": "Cancelled",
+          "nextStatusSymbol": "x",
+          "availableAsCommand": true,
+          "type": "CANCELLED"
+        }
+      ],
+      "compatiblePlugins": {
+        "dailyNotesPlugin": false,
+        "dayPlannerPlugin": false,
+        "tasksPlugin": false,
+        "reminderPlugin": false,
+        "quickAddPlugin": false
+      },
+      "taskNoteIdentifierTag": "taskNote",
+      "preDefinedNote": "Meta/Task_Board/New_Tasks.md",
+      "archivedTasksFilePath": "",
+      "taskNoteDefaultLocation": "Meta/Task_Board/Task_Notes",
+      "archivedTBNotesFolderPath": "Meta/Task_Board/Archived_Task_Notes",
+      "quickAddPluginDefaultChoice": "",
+      "frontmatterFormatting": [
+        {
+          "index": 0,
+          "property": "ID",
+          "key": "id",
+          "taskItemKey": "id"
+        },
+        {
+          "index": 1,
+          "property": "Title",
+          "key": "title",
+          "taskItemKey": "title"
+        },
+        {
+          "index": 2,
+          "property": "Status",
+          "key": "status",
+          "taskItemKey": "status"
+        },
+        {
+          "index": 3,
+          "property": "Priority",
+          "key": "priority",
+          "taskItemKey": "priority"
+        },
+        {
+          "index": 4,
+          "property": "Tags",
+          "key": "tags",
+          "taskItemKey": "tags"
+        },
+        {
+          "index": 5,
+          "property": "Time",
+          "key": "time",
+          "taskItemKey": "time"
+        },
+        {
+          "index": 6,
+          "property": "Reminder",
+          "key": "reminder",
+          "taskItemKey": "reminder"
+        },
+        {
+          "index": 7,
+          "property": "Created date",
+          "key": "created-date",
+          "taskItemKey": "createdDate"
+        },
+        {
+          "index": 8,
+          "property": "Start date",
+          "key": "start-date",
+          "taskItemKey": "startDate"
+        },
+        {
+          "index": 9,
+          "property": "Scheduled date",
+          "key": "scheduled-date",
+          "taskItemKey": "scheduledDate"
+        },
+        {
+          "index": 10,
+          "property": "Due date",
+          "key": "due-date",
+          "taskItemKey": "due"
+        },
+        {
+          "index": 11,
+          "property": "Depends on",
+          "key": "depends-on",
+          "taskItemKey": "dependsOn"
+        },
+        {
+          "index": 12,
+          "property": "Completed date",
+          "key": "cancelled-date",
+          "taskItemKey": "cancelledDate"
+        },
+        {
+          "index": 13,
+          "key": "completed-date",
+          "taskItemKey": "completionDate"
+        }
+      ],
+      "showFrontmatterTagsOnCards": false,
+      "tasksCacheFilePath": "",
+      "notificationService": "none",
+      "actions": [
+        {
+          "enabled": true,
+          "trigger": "Complete",
+          "type": "move",
+          "targetColumn": "Completed"
+        }
+      ],
+      "hiddenTaskProperties": [],
+      "autoAddUniqueID": false,
+      "uniqueIdCounter": 1,
+      "experimentalFeatures": false,
+      "safeGuardFeature": true,
+      "lastViewHistory": {
+        "viewedType": "kanban",
+        "boardIndex": 2,
+        "settingTab": 0
+      },
+      "boundTaskCompletionToChildTasks": false,
+      "mapView": {
+        "background": "none",
+        "mapOrientation": "hor",
+        "optimizedRender": false,
+        "arrowDirection": "c2p",
+        "animatedEdges": true,
+        "scrollAction": "zoom",
+        "showMinimap": true,
+        "renderVisibleNodes": false,
+        "edgeType": "default"
+      },
+      "searchQuery": ""
+    }
+  }
+}

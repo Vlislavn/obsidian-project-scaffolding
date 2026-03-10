@@ -1,0 +1,379 @@
+{
+  "choices": [
+    {
+      "id": "a0000004-0004-4000-8000-000000000004",
+      "name": "Create Entity",
+      "type": "Macro",
+      "command": true,
+      "runOnStartup": false,
+      "macro": {
+        "name": "Create entity",
+        "id": "a0000004-0004-4000-8000-000000000040",
+        "commands": [
+          {
+            "name": "create_entity",
+            "type": "UserScript",
+            "id": "a0000004-0004-4000-8000-000000000041",
+            "path": "99_Archive/templates/scripts/_central/create_entity.js",
+            "settings": {}
+          }
+        ]
+      }
+    },
+    {
+      "id": "f8f4f6f5-4af4-4ea6-9f85-3f57ef3f8f63",
+      "name": "Assign Task",
+      "type": "Macro",
+      "command": true,
+      "runOnStartup": false,
+      "macro": {
+        "name": "Assign existing task",
+        "id": "7fcb2bdb-3eca-4afa-a407-a15f928fef0f",
+        "commands": [
+          {
+            "name": "delegate.js",
+            "type": "UserScript",
+            "id": "25895f01-3f6f-44f9-a255-abebefcb94f6",
+            "path": "99_Archive/templates/scripts/_central/delegate.js",
+            "settings": {}
+          }
+        ]
+      }
+    },
+    {
+      "id": "1ebe250f-8617-406c-852c-2ca87762f9f3",
+      "name": "Complete Task",
+      "type": "Macro",
+      "command": true,
+      "runOnStartup": false,
+      "macro": {
+        "id": "d6ed1145-f7d0-4b08-8cfd-3ef790ce2458",
+        "name": "Complete Task",
+        "commands": [
+          {
+            "name": "complete_task",
+            "type": "UserScript",
+            "id": "edeb8de9-55eb-405c-a36d-36a0415ea5a1",
+            "path": "99_Archive/templates/scripts/_central/complete_task.js",
+            "settings": {}
+          }
+        ]
+      }
+    },
+    {
+      "id": "39f96979-5d5c-4308-bfb8-89dddb21f1e0",
+      "name": "Progress Log",
+      "type": "Macro",
+      "command": true,
+      "runOnStartup": false,
+      "macro": {
+        "name": "Project log",
+        "id": "39f96979-5d5c-4308-bfb8-89dddb21f1e1",
+        "commands": [
+          {
+            "name": "project_log",
+            "type": "UserScript",
+            "id": "39f96979-5d5c-4308-bfb8-89dddb21f1e2",
+            "path": "99_Archive/templates/scripts/_central/project_log.js",
+            "settings": {}
+          }
+        ]
+      }
+    },
+    {
+      "id": "70475df7-5514-4894-bf54-4e15309f7c57",
+      "name": "Meeting Create",
+      "type": "Macro",
+      "command": true,
+      "macro": {
+        "id": "e29dc585-4e28-4fbb-bb01-15ce94756756",
+        "name": "Create Meeting",
+        "commands": [
+          {
+            "name": "Create a note",
+            "type": "NestedChoice",
+            "id": "36f5e9a9-ceec-417c-817b-05d3b326646a",
+            "choice": {
+              "id": "9cbf1316-35db-43d9-a947-4eef5d3af294",
+              "name": "Create a note",
+              "type": "Template",
+              "command": false,
+              "templatePath": "scripts/templates/Template_Meeting.md",
+              "fileNameFormat": {
+                "enabled": true,
+                "format": "{{VALUE:Meeting title}} {{DATE:DD-MM-YYYY}}"
+              },
+              "folder": {
+                "enabled": true,
+                "folders": [
+                  "02_Meeting"
+                ],
+                "chooseWhenCreatingNote": false,
+                "createInSameFolderAsActiveFile": false
+              },
+              "appendLink": false,
+              "openFileInNewTab": {
+                "enabled": false,
+                "direction": "vertical",
+                "focus": true
+              },
+              "openFile": true,
+              "openFileInMode": "default",
+              "setFileExistsBehavior": true,
+              "fileExistsMode": "Increment the file name",
+              "fileOpening": {
+                "location": "tab",
+                "direction": "vertical",
+                "mode": "default",
+                "focus": true
+              }
+            }
+          }
+        ]
+      },
+      "runOnStartup": false
+    },
+    {
+      "id": "16f5a1a2-a759-4b89-8bd5-0d345e76d54d",
+      "name": "Vault Health",
+      "type": "Macro",
+      "command": true,
+      "runOnStartup": false,
+      "macro": {
+        "id": "d954f1d5-00d7-44c3-9c50-1ee4da871c84",
+        "name": "Vault Health",
+        "commands": [
+          {
+            "name": "vault_health",
+            "type": "UserScript",
+            "id": "942a78fa-09fa-4169-8b1b-8c4c0eb107bb",
+            "path": "99_Archive/templates/scripts/_central/vault_health.js",
+            "settings": {}
+          }
+        ]
+      }
+    },
+    {
+      "id": "b4132d6b-3a8c-432c-bf27-7de53f321492",
+      "name": "Navigate (Deliverable -> Story)",
+      "type": "Macro",
+      "command": true,
+      "macro": {
+        "id": "10383c9d-a18f-456b-8b66-345c8c464ab5",
+        "name": "Navigate",
+        "commands": [
+          {
+            "name": "navigate.js",
+            "type": "UserScript",
+            "id": "c7538c57-fbd0-453c-ac6f-fe550a0e3a00",
+            "path": "99_Archive/templates/scripts/_central/navigate.js",
+            "settings": {}
+          }
+        ]
+      },
+      "runOnStartup": false
+    },
+    {
+      "id": "a0000003-0003-4000-8000-000000000003",
+      "name": "Route Note",
+      "type": "Macro",
+      "command": true,
+      "runOnStartup": false,
+      "macro": {
+        "name": "Route note",
+        "id": "a0000003-0003-4000-8000-000000000030",
+        "commands": [
+          {
+            "name": "route_note",
+            "type": "UserScript",
+            "id": "a0000003-0003-4000-8000-000000000031",
+            "path": "99_Archive/templates/scripts/_central/route_note.js",
+            "settings": {}
+          }
+        ]
+      }
+    },
+    {
+      "id": "b69a35db-1820-4cee-b468-e3442a5d3cf1",
+      "name": "Process Inbox",
+      "type": "Macro",
+      "command": true,
+      "macro": {
+        "id": "50f0e363-2ebb-46aa-812a-8d2b59e8321c",
+        "name": "Process inbox",
+        "commands": [
+          {
+            "name": "process_inbox.js",
+            "type": "UserScript",
+            "id": "2935f2ab-7c62-46e3-b799-18b8179be830",
+            "path": "99_Archive/templates/scripts/_central/process_inbox.js",
+            "settings": {}
+          }
+        ]
+      },
+      "runOnStartup": false
+    },
+    {
+      "id": "85bab2e0-8bfc-40cb-86a5-eeb27cef9f2b",
+      "name": "Escalate Task -> Story",
+      "type": "Macro",
+      "command": true,
+      "runOnStartup": false,
+      "macro": {
+        "id": "4559d5ed-1faf-4f23-aac5-77b168aa91d9",
+        "name": "Escalate Task to Story",
+        "commands": [
+          {
+            "name": "escalate_task_to_story",
+            "type": "UserScript",
+            "id": "bcdd1e7d-bfdf-4aec-995a-48dc0834040d",
+            "path": "99_Archive/templates/scripts/_central/escalate_task_to_story.js",
+            "settings": {}
+          }
+        ]
+      }
+    },
+    {
+      "id": "a6ee270c-dcc0-41fc-b5db-5521ae3b883c",
+      "name": "Update Gantt",
+      "type": "Macro",
+      "command": true,
+      "runOnStartup": false,
+      "macro": {
+        "id": "613d98e1-7514-479b-b727-28c33f93be1f",
+        "name": "Update Gantt",
+        "commands": [
+          {
+            "name": "update_gantt",
+            "type": "UserScript",
+            "id": "50d6feb5-c7dd-4f67-a05c-8e2978b5db63",
+            "path": "99_Archive/templates/scripts/_central/update_gantt.js",
+            "settings": {}
+          }
+        ]
+      }
+    },
+    {
+      "id": "c3a7e1b2-9f04-4d8a-b123-4e5f6a7b8c9d",
+      "name": "Edit Task",
+      "type": "Macro",
+      "command": true,
+      "runOnStartup": false,
+      "macro": {
+        "id": "d4b8f2c3-a015-4e9b-c234-5f6a7b8c9d0e",
+        "name": "Edit Task",
+        "commands": [
+          {
+            "name": "edit_task",
+            "type": "UserScript",
+            "id": "e5c9a3d4-b126-4fac-d345-6a7b8c9d0e1f",
+            "path": "99_Archive/templates/scripts/_central/edit_task.js",
+            "settings": {}
+          }
+        ]
+      }
+    },
+    {
+      "id": "a06ed6b2-84da-44af-9e96-eb8582d69919",
+      "name": "Edit Story",
+      "type": "Macro",
+      "command": true,
+      "runOnStartup": false,
+      "macro": {
+        "id": "e947ff40-6b09-4b70-9d6b-eb85c8520d37",
+        "name": "Edit Story",
+        "commands": [
+          {
+            "name": "edit_story",
+            "type": "UserScript",
+            "id": "65eb2274-6080-4b22-8a31-a056eb0748f2",
+            "path": "99_Archive/templates/scripts/_central/edit_story.js",
+            "settings": {}
+          }
+        ]
+      }
+    }
+  ],
+  "inputPrompt": "multi-line",
+  "persistInputPromptDrafts": true,
+  "useSelectionAsCaptureValue": true,
+  "devMode": false,
+  "templateFolderPath": "99_Archive/templates",
+  "announceUpdates": "major",
+  "version": "2.12.0",
+  "globalVariables": {},
+  "onePageInputEnabled": true,
+  "disableOnlineFeatures": true,
+  "enableRibbonIcon": true,
+  "showCaptureNotification": true,
+  "showInputCancellationNotification": false,
+  "enableTemplatePropertyTypes": false,
+  "dateAliases": {
+    "t": "today",
+    "tm": "tomorrow",
+    "yd": "yesterday",
+    "nw": "next week",
+    "nm": "next month",
+    "ny": "next year",
+    "lw": "last week",
+    "lm": "last month",
+    "ly": "last year"
+  },
+  "ai": {
+    "defaultModel": "Ask me",
+    "defaultSystemPrompt": "As an AI assistant within Obsidian, your primary goal is to help users manage their ideas and knowledge more effectively. Format your responses using Markdown syntax. Please use the [[Obsidian]] link format. You can write aliases for the links by writing [[Obsidian|the alias after the pipe symbol]]. To use mathematical notation, use LaTeX syntax. LaTeX syntax for larger equations should be on separate lines, surrounded with double dollar signs ($$). You can also inline math expressions by wrapping it in $ symbols. For example, use $$w_{ij}^{\text{new}}:=w_{ij}^{\text{current}}+etacdotdelta_jcdot x_{ij}$$ on a separate line, but you can write \"($eta$ = learning rate, $delta_j$ = error term, $x_{ij}$ = input)\" inline.",
+    "promptTemplatesFolderPath": "",
+    "showAssistant": true,
+    "providers": [
+      {
+        "name": "OpenAI",
+        "endpoint": "https://api.openai.com/v1",
+        "apiKey": "",
+        "models": [
+          {
+            "name": "gpt-3.5-turbo",
+            "maxTokens": 4096
+          },
+          {
+            "name": "gpt-3.5-turbo-16k",
+            "maxTokens": 16384
+          },
+          {
+            "name": "gpt-3.5-turbo-1106",
+            "maxTokens": 16385
+          },
+          {
+            "name": "gpt-4",
+            "maxTokens": 8192
+          },
+          {
+            "name": "gpt-4-32k",
+            "maxTokens": 32768
+          },
+          {
+            "name": "gpt-4-1106-preview",
+            "maxTokens": 128000
+          },
+          {
+            "name": "text-davinci-003",
+            "maxTokens": 4096
+          }
+        ],
+        "modelSource": "auto"
+      }
+    ]
+  },
+  "migrations": {
+    "migrateToMacroIDFromEmbeddedMacro": true,
+    "useQuickAddTemplateFolder": true,
+    "incrementFileNameSettingMoveToDefaultBehavior": true,
+    "mutualExclusionInsertAfterAndWriteToBottomOfFile": true,
+    "setVersionAfterUpdateModalRelease": true,
+    "addDefaultAIProviders": true,
+    "removeMacroIndirection": true,
+    "migrateFileOpeningSettings": true,
+    "setProviderModelDiscoveryMode": true,
+    "backfillFileOpeningDefaults": true,
+    "migrateProviderApiKeysToSecretStorage": true
+  }
+}

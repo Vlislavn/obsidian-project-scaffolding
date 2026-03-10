@@ -1,0 +1,235 @@
+{
+  "main": {
+    "id": "57f7db760e61a64b",
+    "type": "split",
+    "children": [
+      {
+        "id": "384a099bf9fd6b1f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "519724d386a168f9",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "d5e0b71d5b66cac8",
+    "type": "split",
+    "children": [
+      {
+        "id": "86a782b324f27131",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "373086f7eec9e26e",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "1f03abbae1ee1c90",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "10e9d49e4add8f08",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 404.5
+  },
+  "right": {
+    "id": "a785ba9b11e28693",
+    "type": "split",
+    "children": [
+      {
+        "id": "f38e9552b1a49be8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "fbee639665191b9c",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "03_Deliverables/$Example_Deliverable/stories/$Example_Story_1.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for $Example_Story_1"
+            }
+          },
+          {
+            "id": "4869b0d2a32ca502",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "03_Deliverables/$Example_Deliverable/stories/$Example_Story_1.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from $Example_Story_1"
+            }
+          },
+          {
+            "id": "80d192da27a9a377",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "d0e0b0ae15c88091",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "fe793f117c56b3e8",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "03_Deliverables/$Example_Deliverable/stories/$Example_Story_1.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of $Example_Story_1"
+            }
+          },
+          {
+            "id": "78ee4ed93bf3c5b7",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
+          }
+        ],
+        "currentTab": 5
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false,
+      "quickadd:QuickAdd": false,
+      "templater-obsidian:Templater": false,
+      "obsidian-git:Open Git source control": false,
+      "task-board:Open task board": false
+    }
+  },
+  "active": "373086f7eec9e26e",
+  "lastOpenFiles": [
+    "01_Basic_Info/$Technical_Reference.md",
+    "04_People/@Niklas Woebs.md",
+    "01_Basic_Info/process/README.md",
+    "01_Basic_Info/backlog/$Backlog.md",
+    "$Home.md",
+    "00_Inbox/README.md",
+    "Untitled.md",
+    "03_Deliverables/$Single agent prototype/stories/$Define first implementation task 2026-04-09.md",
+    "03_Deliverables/$Single agent prototype/stories/$Define first delegation task 2026-03-28.md",
+    "03_Deliverables/$Example_Deliverable/stories/$Define first implementation task 2026-03-17.md",
+    "03_Deliverables/$Example_Deliverable/stories/$Define fasdas 2026-03-17.md",
+    "03_Deliverables/$Single agent prototype/stories/$Define first implementation task 2026-03-17.md",
+    "03_Deliverables/$Example_Deliverable/stories/$asdasd wtf-asdasd.md",
+    "03_Deliverables/$Single agent prototype/stories/$Infrastructure.md",
+    "03_Deliverables/$Single agent prototype/stories/$wtf.md",
+    "01_Basic_Info/timeline/$Timeline.md",
+    "03_Deliverables/$Single agent prototype/stories/$GitHub page workflow and infrastructure.md",
+    "03_Deliverables/$Single agent prototype/docs/Report.md",
+    "03_Deliverables/$Single agent prototype/$Single agent prototype.md",
+    "99_Archive/templates/scripts/_central/edit_story.js",
+    "AGENTS.md",
+    "bases/DeliverableStories.base",
+    "03_Deliverables/$Example_Deliverable/$Example_Deliverable.md",
+    "03_Deliverables/$Single agent prototype/stories/$Infrastructure - log.md",
+    "03_Deliverables/$Example_Deliverable/stories/$example story.md",
+    "02_Meeting/New technical meeting with AZ 10-03-2026.md",
+    "03_Deliverables/$Single agent prototype/docs",
+    "03_Deliverables/$Single agent prototype/stories",
+    "03_Deliverables/$Single agent prototype",
+    "scripts/templates/Template_Employee.md",
+    "02_Meeting.md",
+    "scripts/add-task-button.js",
+    "scripts/add-story-button.js",
+    "03_Deliverables/Untitled.base",
+    "bases/Stories.base",
+    "bases/Deliverables.base"
+  ]
+}
