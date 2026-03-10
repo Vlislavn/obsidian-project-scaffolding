@@ -195,6 +195,7 @@
   },
   "active": "373086f7eec9e26e",
   "lastOpenFiles": [
+    "README.md",
     "LICENSE",
     "01_Basic_Info/$Technical_Reference.md",
     "04_People/@Niklas Woebs.md",
@@ -229,7 +230,6 @@
     "scripts/add-task-button.js",
     "scripts/add-story-button.js",
     "03_Deliverables/Untitled.base",
-    "bases/Stories.base",
-    "bases/Deliverables.base"
+    "bases/Stories.base"
   ]
 }
