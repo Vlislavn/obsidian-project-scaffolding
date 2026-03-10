@@ -195,6 +195,7 @@
   },
   "active": "373086f7eec9e26e",
   "lastOpenFiles": [
+    "LICENSE",
     "01_Basic_Info/$Technical_Reference.md",
     "04_People/@Niklas Woebs.md",
     "01_Basic_Info/process/README.md",
@@ -225,7 +226,6 @@
     "03_Deliverables/$Single agent prototype/stories",
     "03_Deliverables/$Single agent prototype",
     "scripts/templates/Template_Employee.md",
-    "02_Meeting.md",
     "scripts/add-task-button.js",
     "scripts/add-story-button.js",
     "03_Deliverables/Untitled.base",
