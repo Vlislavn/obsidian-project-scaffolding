@@ -110,6 +110,7 @@ module.exports = async ({ app, quickAddApi }) => {
         fl[t.line] = updated;
       }
       await app.vault.modify(file, fl.join("\n"));
+      await h.touchStoryLastPing(file);
     }
 
     new Notice("Task(s) completed.");
@@ -140,6 +141,7 @@ module.exports = async ({ app, quickAddApi }) => {
   }
 
   await app.vault.modify(targetFile, lines.join("\n"));
+  await h.touchStoryLastPing(targetFile);
   new Notice("Task(s) completed.");
   return "";
 };

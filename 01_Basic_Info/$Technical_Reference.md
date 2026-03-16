@@ -98,8 +98,6 @@ Tasks are checkbox lines inside Story notes using the Tasks Plugin emoji format:
 | `⏳ YYYY-MM-DD` | Scheduled date |
 | `📅 YYYY-MM-DD` | Due date |
 | `✅ YYYY-MM-DD` | Completion date (auto-added) |
-| `🆔 id` | Unique task ID (auto-generated from story + task name) |
-| `⛔ id1, id2` | Blocked by (depends on these task IDs) |
 | `<br>` | Extra lines (benefit, notes — rendered in reading view) |
 
 ---
@@ -116,8 +114,8 @@ Embedded in each deliverable note. Scans all stories under the deliverable's `st
 |---|---|---|
 | **Overdue** | 🔴 | `deadline < today` AND status ≠ completed/done |
 | **At risk** | 🟡 | `deadline` is within 7 days AND status ≠ completed/done |
-| **Stale** | 🟡 | `last_ping` is empty OR older than 14 days AND status ≠ completed/done |
-| **Blocked** | ⚠️ | Story has `blocked_by` set, OR any task inside has `⛔` dependencies |
+| **Stale** | 🟡 | status = `active` AND (`last_ping` is empty OR older than 14 days) |
+| **Blocked** | ⚠️ | Story has `blocked_by` set |
 
 #### Sections rendered
 
@@ -143,9 +141,9 @@ Embedded in each story note. Scans inline tasks within the current file only.
 | 🔴 Overdue | Update `deadline` in story frontmatter, or change status to `completed` |
 | 🟡 At risk | Prioritize; consider reducing scope or reassigning |
 | 🟡 Stale | Update `last_ping` field in story frontmatter to today's date |
-| ⚠️ Blocked | Resolve the blocking dependency or remove `blocked_by` / `⛔` |
+| ⚠️ Blocked | Resolve story-level dependency or remove `blocked_by` |
 
-**Updating `last_ping`:** Open the story note → edit frontmatter → set `last_ping: YYYY-MM-DD`. This resets the stale timer.
+**Updating `last_ping`:** Open the story note → edit frontmatter → set `last_ping: YYYY-MM-DD`. This resets the stale timer. The system also auto-updates `last_ping` when tasks are created, edited, moved, or completed.
 
 ---
 
@@ -162,7 +160,7 @@ A styled button rendered by `scripts/add-story-button.js`. When clicked:
 
 A styled button rendered by `scripts/add-task-button.js`. When clicked:
 - Auto-detects the parent story from the current note
-- Opens a form: task description, benefit, assignee (optional), size, due/scheduled dates, blocked-by (multi-select from existing tasks with IDs)
+- Opens a form: task description, benefit, assignee (optional), size, due/scheduled dates, notes
 - Inserts the task as an inline checkbox under the `### Tasks` heading
 
 ---

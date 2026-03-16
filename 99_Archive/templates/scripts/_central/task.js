@@ -43,10 +43,6 @@ module.exports = async ({ app, quickAddApi, variables }) => {
     : '';
 
   const dateFieldType = h.getPreferredDateFieldType();
-  const openTaskCandidates = (await h.getOpenTaskCandidates())
-    .filter((candidate) => candidate.taskId)
-    .sort((left, right) => left.taskText.localeCompare(right.taskText));
-  const blockerOptions = openTaskCandidates.map((candidate) => `${candidate.taskId} - ${h.cleanTaskLabel(candidate.line)}`);
 
   const inputConfig = [
     { id: 'taskName', label: 'Task', type: 'textarea', placeholder: 'What needs to be done?' },
@@ -98,14 +94,6 @@ module.exports = async ({ app, quickAddApi, variables }) => {
       placeholder: 'today, tomorrow, YYYY-MM-DD'
     },
     {
-      id: 'blockedBy',
-      label: 'Blocked by',
-      type: 'suggester',
-      options: blockerOptions,
-      suggesterConfig: { multiSelect: true },
-      placeholder: 'Select task dependencies...'
-    },
-    {
       id: 'notes',
       label: 'Notes',
       type: 'textarea',
@@ -143,11 +131,6 @@ module.exports = async ({ app, quickAddApi, variables }) => {
   const scheduled = h.parseAndFormatDate(inputs.scheduledDate);
   const assignee = String(inputs.assignee || '').trim();
 
-  const blockedBy = String(inputs.blockedBy || '')
-    .split(', ')
-    .map((item) => item.split(' - ')[0].trim())
-    .filter(Boolean)
-    .join(', ');
   const notes = String(inputs.notes || '').trim();
   const benefit = String(inputs.benefit || '').trim();
   const createdDate = h.moment ? h.moment().format('YYYY-MM-DD') : new Date().toISOString().slice(0, 10);
@@ -161,7 +144,6 @@ module.exports = async ({ app, quickAddApi, variables }) => {
     scheduledDate: scheduled.valid ? scheduled.formatted : '',
     dueDate: due.valid ? due.formatted : '',
     taskSize: sizeToken,
-    blockedBy,
     benefit,
     notes,
   });
@@ -172,6 +154,7 @@ module.exports = async ({ app, quickAddApi, variables }) => {
   const idx = lines.findIndex((l) => l.trim() === heading.trim());
   lines.splice(idx + 1, 0, line);
   await app.vault.modify(targetStory, lines.join('\n'));
+  await h.touchStoryLastPing(targetStory);
 
   variables.line = line;
   new Notice('Task created in Story.md');

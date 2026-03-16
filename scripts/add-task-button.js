@@ -29,10 +29,6 @@ btn.addEventListener("click", async () => {
 
   const employees = h.getEmployeeNotes();
   const dateFieldType = h.getPreferredDateFieldType();
-  const openTaskCandidates = (await h.getOpenTaskCandidates())
-    .filter((c) => c.taskId)
-    .sort((a, b) => a.taskText.localeCompare(b.taskText));
-  const blockerOptions = openTaskCandidates.map((c) => `${c.taskId} - ${h.cleanTaskLabel(c.line)}`);
 
   const inputs = await qa.requestInputs([
     { id: "taskName", label: "Task", type: "textarea", placeholder: "What needs to be done?" },
@@ -49,11 +45,6 @@ btn.addEventListener("click", async () => {
     },
     { id: "dueDate", label: "Due date", type: dateFieldType, dateFormat: "YYYY-MM-DD", placeholder: "YYYY-MM-DD" },
     { id: "scheduledDate", label: "Scheduled date", type: dateFieldType, dateFormat: "YYYY-MM-DD", placeholder: "YYYY-MM-DD" },
-    {
-      id: "blockedBy", label: "Blocked by", type: "suggester",
-      options: blockerOptions, suggesterConfig: { multiSelect: true },
-      placeholder: "Select task dependencies…"
-    },
     { id: "notes", label: "Notes", type: "textarea", placeholder: "Additional context (optional)" },
   ]);
   if (!inputs) return;
@@ -64,8 +55,6 @@ btn.addEventListener("click", async () => {
   const due = h.parseAndFormatDate(inputs.dueDate);
   const scheduled = h.parseAndFormatDate(inputs.scheduledDate);
   const sizeToken = String(inputs.taskSize || "").trim() || "#s-S";
-  const blockedBy = String(inputs.blockedBy || "")
-    .split(", ").map((item) => item.split(" - ")[0].trim()).filter(Boolean).join(", ");
   const createdDate = h.moment ? h.moment().format("YYYY-MM-DD") : new Date().toISOString().slice(0, 10);
 
   const line = h.buildInlineTaskLine({
@@ -77,7 +66,6 @@ btn.addEventListener("click", async () => {
     scheduledDate: scheduled.valid ? scheduled.formatted : "",
     dueDate: due.valid ? due.formatted : "",
     taskSize: sizeToken,
-    blockedBy,
     benefit: String(inputs.benefit || "").trim(),
     notes: String(inputs.notes || "").trim(),
   });
@@ -88,6 +76,7 @@ btn.addEventListener("click", async () => {
   const idx = lines.findIndex((l) => l.trim() === heading.trim());
   lines.splice(idx + 1, 0, line);
   await app.vault.modify(targetStory, lines.join("\n"));
+  await h.touchStoryLastPing(targetStory);
 
   new Notice("Task created.");
 });

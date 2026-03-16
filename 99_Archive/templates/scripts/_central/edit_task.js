@@ -1,7 +1,7 @@
 /**
  * Unified "Edit Task" macro — find a task by fuzzy search, then pick an action:
  *   Change assignee / Change size / Change due date / Change scheduled date /
- *   Add dependency / Move to another story
+ *   Change status / Move to another story
  */
 
 const _load = async (app, relPath) => {
@@ -69,7 +69,6 @@ module.exports = async ({ app, quickAddApi }) => {
     { label: "📏 Change size", value: "size" },
     { label: "📅 Change due date", value: "due" },
     { label: "⏳ Change scheduled date", value: "scheduled" },
-    { label: "🔗 Add / change dependency", value: "dependency" },
     { label: "🔄 Change status", value: "status" },
     { label: "📂 Move to another story", value: "move" },
   ];
@@ -114,7 +113,7 @@ module.exports = async ({ app, quickAddApi }) => {
       taskLine = taskLine.replace(/#s-(XS|S|M|L|XL)\b/, newSize);
     } else {
       // Insert after checkbox text, before first emoji marker
-      const insertPos = taskLine.search(/\s[➕⏳📅🆔⛔]/);
+      const insertPos = taskLine.search(/\s[➕⏳📅✅❌]/);
       if (insertPos > 0) {
         taskLine = taskLine.slice(0, insertPos) + ` ${newSize}` + taskLine.slice(insertPos);
       } else {
@@ -134,13 +133,7 @@ module.exports = async ({ app, quickAddApi }) => {
     if (/📅\s*\d{4}-\d{2}-\d{2}/.test(taskLine)) {
       taskLine = taskLine.replace(/📅\s*\d{4}-\d{2}-\d{2}/, `📅 ${parsed.formatted}`);
     } else {
-      // Insert before 🆔 if present, otherwise append
-      const idPos = taskLine.indexOf("🆔");
-      if (idPos > 0) {
-        taskLine = taskLine.slice(0, idPos) + `📅 ${parsed.formatted} ` + taskLine.slice(idPos);
-      } else {
-        taskLine += ` 📅 ${parsed.formatted}`;
-      }
+      taskLine += ` 📅 ${parsed.formatted}`;
     }
   }
 
@@ -156,47 +149,12 @@ module.exports = async ({ app, quickAddApi }) => {
       taskLine = taskLine.replace(/⏳\s*\d{4}-\d{2}-\d{2}/, `⏳ ${parsed.formatted}`);
     } else {
       const duePos = taskLine.indexOf("📅");
-      const idPos = taskLine.indexOf("🆔");
-      const insertBefore = duePos > 0 ? duePos : idPos > 0 ? idPos : -1;
+      const insertBefore = duePos > 0 ? duePos : -1;
       if (insertBefore > 0) {
         taskLine = taskLine.slice(0, insertBefore) + `⏳ ${parsed.formatted} ` + taskLine.slice(insertBefore);
       } else {
         taskLine += ` ⏳ ${parsed.formatted}`;
       }
-    }
-  }
-
-  if (action === "dependency") {
-    const openTaskCandidates = (await h.getOpenTaskCandidates())
-      .filter((c) => c.taskId)
-      .sort((a, b) => a.taskText.localeCompare(b.taskText));
-    if (!openTaskCandidates.length) { new Notice("No tasks with IDs found."); return ""; }
-
-    const depOptions = openTaskCandidates.map((c) => `${c.taskId} - ${h.cleanTaskLabel(c.line)}`);
-    const depInputs = await quickAddApi.requestInputs([
-      {
-        id: "deps",
-        label: "Dependencies (blocked by)",
-        type: "suggester",
-        options: depOptions,
-        suggesterConfig: { multiSelect: true },
-        placeholder: "Select dependencies…"
-      }
-    ]);
-    if (!depInputs) return "";
-    const newIds = String(depInputs.deps || "")
-      .split(", ")
-      .map((item) => item.split(" - ")[0].trim())
-      .filter(Boolean);
-    if (!newIds.length) return "";
-
-    const existingMatch = taskLine.match(/⛔\s*([A-Za-z0-9_\-, ]+)/);
-    if (existingMatch) {
-      const existing = existingMatch[1].split(",").map((s) => s.trim()).filter(Boolean);
-      const merged = [...new Set([...existing, ...newIds])].join(", ");
-      taskLine = taskLine.replace(/⛔\s*[A-Za-z0-9_\-, ]+/, `⛔ ${merged}`);
-    } else {
-      taskLine += ` ⛔ ${newIds.join(", ")}`;
     }
   }
 
@@ -267,6 +225,8 @@ module.exports = async ({ app, quickAddApi }) => {
     const headingIdx = targetLines.findIndex((l) => l.trim() === heading.trim());
     targetLines.splice(headingIdx + 1, 0, removedLine);
     await app.vault.modify(targetStory, targetLines.join("\n"));
+    await h.touchStoryLastPing(selected.file);
+    await h.touchStoryLastPing(targetStory);
 
     new Notice(`Task moved to ${targetStoryName}.`);
     app.workspace.openLinkText(targetStory.path, "", false);
@@ -276,6 +236,7 @@ module.exports = async ({ app, quickAddApi }) => {
   // Write change back (for non-move actions)
   lines[selected.lineIndex] = taskLine;
   await app.vault.modify(selected.file, lines.join("\n"));
+  await h.touchStoryLastPing(selected.file);
 
   new Notice(`Task updated (${action}).`);
   app.workspace.openLinkText(selected.file.path, "", false);

@@ -20,9 +20,9 @@ last_ping:
 ## Tasks
 
 > Tasks are the SSOT. Assignees see their tasks via query in `@Name.md`.
-> Tasks use Tasks Emoji Format metadata. Recommended format: `- [ ] Task name #s-S [[@Assignee]] ➕ 2026-03-09 ⏳ 2026-03-12 📅 2026-03-15 🆔 task_id ⛔ blocker_id`
+> Tasks use Tasks Emoji Format metadata. Recommended format: `- [ ] Task name #s-S [[@Assignee]] ➕ 2026-03-09 ⏳ 2026-03-12 📅 2026-03-15`
 
-- [ ] Example task #s-S [[@Assignee]] ➕ 2026-03-09 📅 2026-04-01 🆔 example_story_task
+- [ ] Example task #s-S [[@Assignee]] ➕ 2026-03-09 📅 2026-04-01
 
 ## Task Stats
 

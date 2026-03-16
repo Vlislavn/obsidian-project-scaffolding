@@ -136,13 +136,11 @@ module.exports = ({ app }) => {
         const match = lines[lineIndex].match(taskRegex);
         if (!match) continue;
         const taskText = match[2].trim();
-        const taskId = taskText.match(/🆔\s*([A-Za-z0-9_-]+)/)?.[1] || "";
         candidates.push({
           file,
           lineIndex,
           line: lines[lineIndex],
           taskText,
-          taskId,
         });
       }
     }
@@ -184,15 +182,6 @@ module.exports = ({ app }) => {
     return true;
   };
 
-  const slugify = (value) =>
-    String(value || "")
-      .toLowerCase()
-      .replace(/^\$+/, "")
-      .replace(/[^a-z0-9\s-]/g, "")
-      .trim()
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-");
-
   const normalizeAssigneeLink = (assignee) => {
     const raw = String(assignee || "")
       .replace(/^\[\[/, "")
@@ -203,25 +192,12 @@ module.exports = ({ app }) => {
     return `[[${normalized}]]`;
   };
 
-  const buildTaskId = (storyFile, taskName) => {
-    const storyPart = slugify(storyFile?.basename || "story") || "story";
-    const taskPart = slugify(taskName).slice(0, 28) || "task";
-    return `${storyPart}-${taskPart}`;
-  };
-
   const formatMultilineHtml = (value) =>
     String(value || "")
       .split(/\r?\n/)
       .map((line) => line.trim())
       .filter(Boolean)
       .join("<br>");
-
-  const normalizeDependsOnIds = (value) =>
-    String(value || "")
-      .split(",")
-      .map((part) => part.trim())
-      .filter(Boolean)
-      .join(", ");
 
   /** Strip inline metadata from a task line for clean display in suggesters. */
   const cleanTaskLabel = (raw) =>
@@ -234,8 +210,13 @@ module.exports = ({ app }) => {
       .replace(/\s{2,}/g, " ")
       .trim();
 
+  const touchStoryLastPing = async (storyFile) => {
+    if (!storyFile) return false;
+    const today = moment ? moment().format("YYYY-MM-DD") : new Date().toISOString().slice(0, 10);
+    return updateFrontmatterField(storyFile, "last_ping", today);
+  };
+
   const buildInlineTaskLine = ({
-    storyFile,
     taskName,
     assignee,
     deliverableLink = "",
@@ -243,10 +224,8 @@ module.exports = ({ app }) => {
     scheduledDate = "",
     dueDate = "",
     taskSize = "#s-S",
-    blockedBy = "",
     benefit = "",
     notes = "",
-    taskId = "",
   }) => {
     const taskLines = String(taskName || "")
       .split(/\r?\n/)
@@ -260,11 +239,9 @@ module.exports = ({ app }) => {
     const cleanCreatedDate = String(createdDate || "").trim();
     const cleanScheduledDate = String(scheduledDate || "").trim();
     const cleanDueDate = String(dueDate || "").trim();
-    const cleanBlockedBy = normalizeDependsOnIds(blockedBy);
     const cleanBenefit = formatMultilineHtml(benefit);
     const cleanNotes = formatMultilineHtml(notes);
     const assigneeLink = normalizeAssigneeLink(assignee);
-    const resolvedTaskId = String(taskId || "").trim() || buildTaskId(storyFile, cleanTaskName);
     const extraTaskText = formatMultilineHtml(taskLines.slice(1).join("\n"));
 
     const parts = [`- [ ] ${cleanTaskName}${cleanSize ? ` ${cleanSize}` : ""}`];
@@ -273,8 +250,6 @@ module.exports = ({ app }) => {
     if (cleanCreatedDate) parts.push(`➕ ${cleanCreatedDate}`);
     if (cleanScheduledDate) parts.push(`⏳ ${cleanScheduledDate}`);
     if (cleanDueDate) parts.push(`📅 ${cleanDueDate}`);
-    parts.push(`🆔 ${resolvedTaskId}`);
-    if (cleanBlockedBy) parts.push(`⛔ ${cleanBlockedBy}`);
     if (extraTaskText) parts.push(`<br>${extraTaskText}`);
     if (cleanBenefit) parts.push(`<br>Benefit: ${cleanBenefit}`);
     if (cleanNotes) parts.push(`<br>${cleanNotes}`);
@@ -299,11 +274,10 @@ module.exports = ({ app }) => {
     getFrontmatter,
     similarity,
     updateFrontmatterField,
-    buildTaskId,
+    touchStoryLastPing,
     buildInlineTaskLine,
     normalizeAssigneeLink,
     formatMultilineHtml,
-    normalizeDependsOnIds,
     cleanTaskLabel,
     quickAddApi,
   };

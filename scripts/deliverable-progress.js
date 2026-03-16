@@ -7,7 +7,6 @@
 const TASK_PATTERN = /^-\s+\[([ x\/?>*-])\]\s+(.+)$/i;
 const LINK_PATTERN = /\[\[([^\]]+)\]\]/g;
 const DUE_PATTERN = /📅\s*(\d{4}-\d{2}-\d{2})/i;
-const BLOCKED_BY_PATTERN = /⛔\s*([A-Za-z0-9_\- ,]+)/i;
 const SIZE_PATTERN = /#s-(XS|S|M|L|XL)\b/i;
 const SIZE_WEIGHT = { XL: 4, L: 3, M: 2, S: 1.5, XS: 1, unsized: 1 };
 
@@ -31,17 +30,12 @@ function parseTaskLine(line) {
   const links = [...body.matchAll(LINK_PATTERN)].map((entry) => entry[1]);
   const assignee = links.find((link) => link.startsWith("@")) || links[0] || "";
   const dueDate = body.match(DUE_PATTERN)?.[1] || "";
-  const blockedBy = (body.match(BLOCKED_BY_PATTERN)?.[1] || "")
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean);
 
   return {
     raw: line,
     state,
     assignee,
     dueDate,
-    blockedBy,
     size: body.match(SIZE_PATTERN)?.[1] || "unsized",
     isDone: state.toLowerCase() === "x",
     isInProgress: state === "/",
@@ -56,7 +50,6 @@ function summarizeStoryTasks(content) {
   const doneTasks = activeTasks.filter((task) => task.isDone);
   const inProgressTasks = activeTasks.filter((task) => task.isInProgress);
   const openTasks = activeTasks.filter((task) => task.isOpen && !task.isInProgress);
-  const blockedTasks = activeTasks.filter((task) => task.blockedBy.length > 0);
   const completionPct = activeTasks.length ? Math.round((doneTasks.length / activeTasks.length) * 100) : null;
 
   const getWeight = (task) => SIZE_WEIGHT[task.size] || 1;
@@ -72,7 +65,6 @@ function summarizeStoryTasks(content) {
     done: doneTasks.length,
     inProgress: inProgressTasks.length,
     open: openTasks.length,
-    blocked: blockedTasks.length,
     completionPct,
     donePoints,
     inProgressPoints,
@@ -127,10 +119,10 @@ for (const story of stories) {
     const deltaDays = Math.round((new Date(`${deadline}T00:00:00`).getTime() - new Date(`${today}T00:00:00`).getTime()) / 86400000);
     if (deltaDays <= 7 && !["completed", "done"].includes(status)) flags.push("at risk");
   }
-  if (!lastPing || lastPing < normalizeDate(new Date(Date.now() - 14 * 86400000).toISOString())) {
-    if (!["completed", "done"].includes(status)) flags.push("stale");
+  if (status === "active" && (!lastPing || lastPing < normalizeDate(new Date(Date.now() - 14 * 86400000).toISOString()))) {
+    flags.push("stale");
   }
-  if (storyBlockedBy || metrics.blocked > 0) flags.push("blocked");
+  if (storyBlockedBy) flags.push("blocked");
 
   for (const task of metrics.tasks) {
     if (task.isCancelled) continue;

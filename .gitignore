@@ -1,24 +1,21 @@
-### AL ###
-#Template for AL projects for Dynamics 365 Business Central
-#launch.json folder
+# OS
+.DS_Store
+
+# Dependencies
+node_modules/
+
+# Local editor workspace state
 .vscode/
-#Cache folder
-.alcache/
-#Symbols folder
-.alpackages/
-#Snapshots folder
-.snapshots/
-#Testing Output folder
-.output/
-#Extension App-file
-*.app
-#Rapid Application Development File
-rad.json
-#Translation Base-file
-*.g.xlf
-#License-file
-*.flf
-#Test results file
-TestResults.xml
-.github/
+
+# Personal Obsidian workspace state
+.obsidian/workspace.json
+.obsidian/graph.json
 .obsidian/AGENTS.md
+
+# Plugin binaries and runtime state
+.obsidian/plugins/*/main.js
+.obsidian/plugins/*/manifest.json
+.obsidian/plugins/*/styles.css
+.obsidian/plugins/task-board/tasks.json
+.obsidian/plugins/task-board/task-board-logs.log
+.obsidian/plugins/quickadd/write_flow_state.json
