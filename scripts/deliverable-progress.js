@@ -46,6 +46,10 @@ function parseTaskLine(line) {
 
 function summarizeStoryTasks(content) {
   const tasks = content.split("\n").map(parseTaskLine).filter(Boolean);
+  return summarizeTaskList(tasks);
+}
+
+function summarizeTaskList(tasks) {
   const activeTasks = tasks.filter((task) => !task.isCancelled);
   const doneTasks = activeTasks.filter((task) => task.isDone);
   const inProgressTasks = activeTasks.filter((task) => task.isInProgress);
@@ -74,6 +78,31 @@ function summarizeStoryTasks(content) {
   };
 }
 
+// Find external tasks linking to a story via resolvedLinks backlink index
+function findExternalTasksForStory(storyPath, storyName, resolvedLinks, parsedFileCache) {
+  const candidatePaths = [];
+  for (const [sourcePath, targets] of Object.entries(resolvedLinks)) {
+    if (sourcePath === storyPath) continue;
+    if (targets?.[storyPath]) candidatePaths.push(sourcePath);
+  }
+
+  const escapedName = storyName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const linkRegex = new RegExp(`\\[\\[\\s*(?:[^\\]]*\\/)?${escapedName}(?:\\|[^\\]]+)?\\s*\\]\\]`, "i");
+  const results = [];
+
+  for (const candidatePath of candidatePaths) {
+    const lines = parsedFileCache.get(candidatePath);
+    if (!lines) continue;
+    for (const line of lines) {
+      if (!line.trimStart().startsWith("- [")) continue;
+      if (!linkRegex.test(line)) continue;
+      const parsed = parseTaskLine(line);
+      if (parsed) results.push(parsed);
+    }
+  }
+  return results;
+}
+
 function progressBar(done, inProgress, total) {
   if (!total) return "";
   const pctDone = Math.round((done / total) * 100);
@@ -99,15 +128,50 @@ const stories = dv.pages('"' + dv.current().file.folder + '/stories"')
   .where((story) => String(story.type || "").toLowerCase() === "story")
   .array();
 
+// ── Pre-build backlink file cache (one vault pass for all stories) ──
+const resolvedLinks = app.metadataCache.resolvedLinks || {};
+const storyPaths = new Set(stories.map((s) => s.file.path));
+const candidateFilePaths = new Set();
+
+for (const [sourcePath, targets] of Object.entries(resolvedLinks)) {
+  if (storyPaths.has(sourcePath)) continue;
+  for (const targetPath of Object.keys(targets || {})) {
+    if (storyPaths.has(targetPath)) { candidateFilePaths.add(sourcePath); break; }
+  }
+}
+
+const parsedFileCache = new Map();
+for (const candidatePath of candidateFilePaths) {
+  if (!candidatePath.endsWith(".md")) continue;
+  const f = app.vault.getAbstractFileByPath(candidatePath);
+  if (!f) continue;
+  const text = await app.vault.cachedRead(f);
+  parsedFileCache.set(candidatePath, text.split("\n"));
+}
+
 const storyMetrics = [];
 const sizeLoad = new Map();
+let totalExternalTasks = 0;
 
 for (const story of stories) {
   const file = app.vault.getAbstractFileByPath(story.file.path);
   if (!file) continue;
 
   const content = await app.vault.cachedRead(file);
-  const metrics = summarizeStoryTasks(content);
+  const localTasks = content.split("\n").map(parseTaskLine).filter(Boolean);
+
+  // Find external tasks linking to this story
+  const storyName = file.basename;
+  const externalTasks = findExternalTasksForStory(story.file.path, storyName, resolvedLinks, parsedFileCache);
+
+  // Deduplicate: skip external tasks with identical text to local tasks
+  const localTexts = new Set(localTasks.map((t) => t.raw.trim()));
+  const uniqueExternal = externalTasks.filter((t) => !localTexts.has(t.raw.trim()));
+  totalExternalTasks += uniqueExternal.filter((t) => !t.isCancelled).length;
+
+  const allTasks = [...localTasks, ...uniqueExternal];
+  const metrics = summarizeTaskList(allTasks);
+
   const deadline = normalizeDate(story.deadline);
   const lastPing = normalizeDate(story.last_ping);
   const status = String(story.status || "backlog").toLowerCase();
@@ -146,6 +210,7 @@ for (const story of stories) {
     size: String(story.size || "-") || "-",
     blocking: String(story.blocking || "").trim(),
     blockedBy: storyBlockedBy,
+    externalCount: uniqueExternal.filter((t) => !t.isCancelled).length,
     ...metrics,
     flags,
   });
@@ -183,6 +248,7 @@ const summaryHtml = `<div style="padding:8px 0">` +
   progressBar(totalDonePoints, totalInProgressPoints, totalAllPoints) +
   `<div style="margin-top:4px">` +
   `✅ ${doneTasks} done · ⏳ ${inProgressTasks} in progress · 📋 ${openTasks} open · <strong>${totalActiveTasks}</strong> total` +
+  (totalExternalTasks ? ` · 🔗 ${totalExternalTasks} external` : "") +
   `</div></div>`;
 
 dv.el("div", summaryHtml);
@@ -205,7 +271,7 @@ if (attentionItems.length) {
 // ── Story Breakdown ──
 dv.header(3, "📋 Story Breakdown");
 dv.table(
-  ["Story", "Progress", "Done", "Open", "Status", "Deadline", "Flags"],
+  ["Story", "Progress", "Done", "Open", "🔗", "Status", "Deadline", "Flags"],
   storyMetrics.map((entry) => {
     const pctLabel = entry.completionPct === null ? "-" : `${entry.completionPct}%`;
     return [
@@ -213,6 +279,7 @@ dv.table(
       pctLabel,
       entry.done,
       entry.inProgress + entry.open,
+      entry.externalCount || "-",
       entry.status,
       entry.deadline || "-",
       entry.flags.length ? entry.flags.map(flagEmoji).join(" ") : "✅",

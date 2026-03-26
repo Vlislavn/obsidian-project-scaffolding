@@ -87,6 +87,7 @@ btn.addEventListener("click", async () => {
     `moscow: ${moscow}`, "last_ping: ", "---", "",
     `# ${storyName}`, "", "## Description", "",
     "```dataviewjs", 'await dv.view("scripts/add-task-button");', "```", "",
+    "```dataviewjs", 'await dv.view("scripts/add-log-button");', "```", "",
     "### Tasks", "",
     "## Task Stats", "", "```dataviewjs", 'await dv.view("scripts/story-progress");', "```", ""
   ].join("\n");

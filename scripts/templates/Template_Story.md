@@ -17,6 +17,14 @@ last_ping:
 
 
 
+```dataviewjs
+await dv.view("scripts/add-task-button");
+```
+
+```dataviewjs
+await dv.view("scripts/add-log-button");
+```
+
 ## Tasks
 
 > Tasks are the SSOT. Assignees see their tasks via query in `@Name.md`.

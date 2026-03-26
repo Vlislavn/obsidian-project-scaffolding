@@ -6,6 +6,7 @@
 
 const TASK_PATTERN = /^-\s+\[([ x\/?>*-])\]\s+(.+)$/i;
 const SIZE_PATTERN = /#s-(XS|S|M|L|XL)\b/i;
+const DUE_PATTERN = /📅\s*(\d{4}-\d{2}-\d{2})/i;
 const SIZE_WEIGHT = { XL: 4, L: 3, M: 2, S: 1.5, XS: 1, unsized: 1 };
 
 function parseTaskLine(line) {
@@ -15,15 +16,19 @@ function parseTaskLine(line) {
   const state = match[1];
   const body = match[2];
   const size = body.match(SIZE_PATTERN)?.[1] || "unsized";
+  const dueDate = body.match(DUE_PATTERN)?.[1] || "";
 
   return {
     raw: line,
     state,
     size,
+    dueDate,
     isDone: state.toLowerCase() === "x",
     isInProgress: state === "/",
     isCancelled: state === "*" || state === "-",
     isNotDone: [" ", "/", ">", "?"].includes(state),
+    isExternal: false,
+    sourcePath: "",
   };
 }
 
@@ -38,17 +43,60 @@ function progressBar(done, inProgress, total) {
     `</div></div>`;
 }
 
-const file = app.vault.getAbstractFileByPath(dv.current().file.path);
+function getDueRisk(task, today) {
+  if (!task.dueDate || task.isDone || task.isCancelled) return "";
+  if (task.dueDate < today) return "🔴 overdue";
+  const delta = Math.round((new Date(`${task.dueDate}T00:00:00`).getTime() - new Date(`${today}T00:00:00`).getTime()) / 86400000);
+  if (delta <= 3) return "🟠 due soon";
+  return "";
+}
+
+// ── Gather local tasks ──
+const storyPath = dv.current().file.path;
+const storyName = dv.current().file.name;
+const file = app.vault.getAbstractFileByPath(storyPath);
 if (!file) {
   dv.paragraph("Story file not found.");
   return;
 }
 
 const content = await app.vault.cachedRead(file);
-const tasks = content
-  .split("\n")
-  .map(parseTaskLine)
-  .filter(Boolean);
+const localTasks = content.split("\n").map(parseTaskLine).filter(Boolean);
+
+// ── Gather external tasks linking to this story ──
+const externalTasks = [];
+const resolved = app.metadataCache.resolvedLinks || {};
+const candidatePaths = [];
+for (const [sourcePath, targets] of Object.entries(resolved)) {
+  if (sourcePath === storyPath) continue;
+  if (targets?.[storyPath]) candidatePaths.push(sourcePath);
+}
+
+const escapedName = storyName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const storyLinkRegex = new RegExp(`\\[\\[\\s*(?:[^\\]]*\\/)?${escapedName}(?:\\|[^\\]]+)?\\s*\\]\\]`, "i");
+
+for (const candidatePath of candidatePaths) {
+  const f = app.vault.getAbstractFileByPath(candidatePath);
+  if (!f || !candidatePath.endsWith(".md")) continue;
+  const extContent = await app.vault.cachedRead(f);
+  for (const line of extContent.split("\n")) {
+    if (!line.trimStart().startsWith("- [")) continue;
+    if (!storyLinkRegex.test(line)) continue;
+    const parsed = parseTaskLine(line);
+    if (parsed) {
+      parsed.isExternal = true;
+      parsed.sourcePath = candidatePath;
+      externalTasks.push(parsed);
+    }
+  }
+}
+
+// ── Deduplicate: external task skipped if identical text exists locally ──
+const localTexts = new Set(localTasks.map((t) => t.raw.trim()));
+const uniqueExternal = externalTasks.filter((t) => !localTexts.has(t.raw.trim()));
+
+const tasks = [...localTasks, ...uniqueExternal];
+const today = new Date().toISOString().slice(0, 10);
 
 const activeTasks = tasks.filter((task) => !task.isCancelled);
 const doneTasks = activeTasks.filter((task) => task.isDone);
@@ -75,12 +123,18 @@ if (!activeTasks.length) {
   return;
 }
 
-// Summary bar
+// ── Due date risk summary ──
+const overdueTasks = activeTasks.filter((t) => getDueRisk(t, today) === "🔴 overdue");
+const dueSoonTasks = activeTasks.filter((t) => getDueRisk(t, today) === "🟠 due soon");
+
+// ── Summary bar ──
 dv.el("div", progressBar(donePoints, inProgressPoints, totalPoints));
 
 const ptsLabel = pointsPct === null ? "" : ` **${pointsPct}%**`;
+const extLabel = uniqueExternal.length ? ` · 🔗 ${uniqueExternal.filter((t) => !t.isCancelled).length} external` : "";
+const riskLabel = (overdueTasks.length ? ` · 🔴 ${overdueTasks.length} overdue` : "") + (dueSoonTasks.length ? ` · 🟠 ${dueSoonTasks.length} due soon` : "");
 dv.paragraph(
-  `✅ ${donePoints}/${totalPoints} pts${ptsLabel} · ${doneTasks.length} done · ⏳ ${inProgressTasks.length} in progress · 📋 ${notDoneTasks.length - inProgressTasks.length} open · **${activeTasks.length}** total`
+  `✅ ${donePoints}/${totalPoints} pts${ptsLabel} · ${doneTasks.length} done · ⏳ ${inProgressTasks.length} in progress · 📋 ${notDoneTasks.length - inProgressTasks.length} open · **${activeTasks.length}** total${extLabel}${riskLabel}`
 );
 
 // Size breakdown (only if multiple sizes)
@@ -98,4 +152,21 @@ if (bySize.length > 1) {
     ];
   });
   dv.table(["Size", "Done", "%", "Points", "In Prog", "Open"], sizeRows);
+}
+
+// ── External tasks detail (only if any) ──
+if (uniqueExternal.filter((t) => !t.isCancelled).length) {
+  const extRows = uniqueExternal.filter((t) => !t.isCancelled).map((t) => {
+    const risk = getDueRisk(t, today);
+    const sourceLink = t.sourcePath.replace(/\.md$/, "").split("/").pop();
+    return [
+      t.raw.replace(TASK_PATTERN, "$2").replace(storyLinkRegex, "").trim().slice(0, 60),
+      t.isDone ? "✅" : t.isInProgress ? "⏳" : "📋",
+      t.dueDate || "-",
+      risk || "✅",
+      `[[${sourceLink}]]`,
+    ];
+  });
+  dv.header(4, `🔗 External Tasks (${extRows.length})`);
+  dv.table(["Task", "Status", "Due", "Risk", "Source"], extRows);
 }
