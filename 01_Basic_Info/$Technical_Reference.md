@@ -253,3 +253,46 @@ task_preferences: "[]"
 - **Blocking/blocked_by (stories):** Wikilinks to other story notes
 - **Templates:** In `99_Archive/templates/` — used by QuickAdd for note creation
 - **Date aliases in QuickAdd prompts:** `t` = today, `tm` = tomorrow, `yd` = yesterday, `nw` = next week
+
+---
+
+## 10. React Dashboard Integration
+
+This vault is the SSOT for a companion React dashboard ([az_collab_tracker](https://github.com/Agent-Societies-Collaborative-Space/az_collab_tracker)). A Node.js parser converts the vault into `data.json`.
+
+### Running the parser
+
+```bash
+node scripts/parse-vault.js /path/to/this-vault src/data.json
+node scripts/validate-data.js src/data.json   # referential-integrity check
+```
+
+### What the parser extracts
+
+| Vault file | Dashboard entity | Key frontmatter |
+|---|---|---|
+| `00_Project.md` / `$Home.md` | Project header | `name`, `phase`, `deadline` |
+| `03_Deliverables/$Name/$Name.md` | Build card | `status`, `owner`, `start_date`, `deadline` |
+| `stories/*.md` | Action card + Tackling tasks | `status`, `owner`, `moscow`, `deadline`, `size`, `last_ping` |
+| Inline `- [ ]` tasks in stories | Task list per member | `#s-*`, `[[@Name]]`, `📅`, `⏳` |
+| `04_People/@Name.md` | Member card | `fte`, `role`, `background` |
+| `05_Insights/*.md` | Insight card | `type: insight\|risk`, `priority` |
+
+### What must be correct for full rendering
+
+1. **Deliverable folders** must contain a `.md` with `type: deliverable` frontmatter.
+2. **Stories** must live under `stories/` sub-folders of deliverables.
+3. **Tasks** must be root-level (no indentation) `- [ ]` lines with emoji metadata.
+4. **Assignees** (`[[@Name]]`) must match the filename in `04_People/` exactly (e.g., `[[@Vlad]]` → `@Vlad.md`).
+5. **Dates** must be `YYYY-MM-DD` format in frontmatter and inline.
+6. **MoSCoW** (`must`/`should`/`could`) determines the action card category (priority / formal / sprint).
+7. **Insights** folder (`05_Insights/`) is optional — if missing, insights are auto-derived from overdue/stale/unassigned stories.
+
+### Common issues
+
+| Dashboard shows | Root cause | Fix |
+|---|---|---|
+| Empty member cards | `@Name.md` filename doesn't match `[[@Name]]` in tasks | Use exact matching names |
+| "TBD" everywhere | `owner` frontmatter is template placeholder `[[@Name]]` | Replace with actual person |
+| Missing task badges | Tasks lack `📅` or `#s-*` tokens | Add due date and size to task line |
+| Stale insight keeps firing | `last_ping` not updated | Set `last_ping: YYYY-MM-DD` in story frontmatter |
